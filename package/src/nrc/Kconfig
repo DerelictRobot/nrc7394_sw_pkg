@@ -1,5 +1,5 @@
 
-config NRC7394
+config NRC7394_WIFI
 	tristate "Newracom 802.11ah Wi-Fi halow driver (NRC7394)"
 	depends on MAC80211
 	depends on SPI
