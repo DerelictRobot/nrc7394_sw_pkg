@@ -28,9 +28,9 @@ hostapd_debug     = 0         # Hostapd debug option    : 0(off) or 1(on)
 #################################################################################
 # CSPI Conf. (Default)
 spi_clock    = 20000000       # SPI Master Clock Frequency
-spi_bus_num  = 0              # SPI Master Bus Number
+spi_bus_num  = 1              # SPI Master Bus Number
 spi_cs_num   = 0              # SPI Master Chipselect Number
-spi_gpio_irq = 5              # NRC-CSPI EIRQ GPIO Number
+spi_gpio_irq = 141              # NRC-CSPI EIRQ GPIO Number
                               # BBB is 60 recommanded.
 spi_polling_interval = 0      # NRC-CSPI Polling Interval (msec)
 
