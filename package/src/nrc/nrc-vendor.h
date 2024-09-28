@@ -68,7 +68,7 @@
 #define TARGET_DEEP_SLEEP_GPIO_OUT			(0x0)
 #define TARGET_DEEP_SLEEP_GPIO_PULLUP		(0x0)
 
-#define RPI_GPIO_FOR_RST					(4)
+#define RPI_GPIO_FOR_RST					(72)
 
 enum nrc_vendor_event {
 	NRC_SUBCMD_ANNOUNCE1 = 0,

@@ -77,15 +77,15 @@ int hifspeed = 115200;
 module_param(hifspeed, int, 0600);
 MODULE_PARM_DESC(hifspeed, "HIF port speed");
 
-int spi_bus_num;
+int spi_bus_num = 1;
 module_param(spi_bus_num, int, 0600);
 MODULE_PARM_DESC(spi_bus_num, "SPI controller bus number");
 
-int spi_cs_num;
+int spi_cs_num = 0;
 module_param(spi_cs_num, int, 0600);
 MODULE_PARM_DESC(spi_cs_num, "SPI chip select number");
 
-int spi_gpio_irq = 5;
+int spi_gpio_irq = 74;
 module_param(spi_gpio_irq, int, 0600);
 MODULE_PARM_DESC(spi_gpio_irq, "SPI gpio irq");
 
