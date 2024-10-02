@@ -2368,8 +2368,17 @@ int nrc_cspi_gpio_alloc(struct spi_device *spi)
 			dev_err(&spi->dev, "[Error] gpio_reqeust() is failed (%d)", spi->irq);
 			goto err_free_all;
 		}
-		gpio_direction_input(spi->irq);
-	}
+		gpio_direction_input(spi_gpio_irq);
+	}		
+#else
+	if (spi->irq >= 0) {
+		int gpio_irq;
+		if (of_property_read_u32(spi->dev.of_node, "interrupts", &gpio_irq)) {
+			dev_err(&spi->dev, "[Error] Failed to get interrupts info from dts\n");
+			goto err_free_all;
+		} else {
+			gpio_direction_input(gpio_irq);
+		}	}
 #endif
 
 	return 0;
