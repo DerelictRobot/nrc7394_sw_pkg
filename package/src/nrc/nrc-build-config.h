@@ -22,6 +22,7 @@
 #define NRC_SW_ID       1
 
 #define NRC_BUILD_USE_HWSCAN
+#define ENABLE_HW_RESET
 /* #define CONFIG_NRC_HIF_PRINT_BEACON */
 /* #define CONFIG_NRC_HIF_PRINT_RX_AUTH */
 /* #define CONFIG_NRC_HIF_PRINT_RX_DATA */
@@ -210,7 +211,7 @@
 #define CONFIG_SPI_USE_DT
 #endif
 /* You can enable forcely in current version */
-/* #define CONFIG_SPI_USE_DT */
+// #define CONFIG_SPI_USE_DT
 
 #if KERNEL_VERSION(5, 4, 0) <= NRC_TARGET_KERNEL_VERSION
 #define CONFIG_USE_MAX_MTU
