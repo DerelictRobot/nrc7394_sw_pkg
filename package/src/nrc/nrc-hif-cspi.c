@@ -1713,11 +1713,11 @@ static int spi_probe(struct nrc_hif_device *dev)
 	spi = priv->spi;
 
 	for (i = 0; i < MAX_PROBE_CNT; i++) {
-		mdelay(50);
+		mdelay(500);
 		ret = spi_read_sys_reg(spi, sys);
 
 		if (ret) {
-			dev_info(&spi->dev, "Target not ready...");
+			dev_info(&spi->dev, "SPI Probe: Target not ready...");
 			continue;
 		}
 
@@ -1725,7 +1725,7 @@ static int spi_probe(struct nrc_hif_device *dev)
 					sys->chip_id, sys->modem_id, sys->status);
 
 		if (fw_name && !(sys->status & 0x1)) {
-			dev_info(&spi->dev, "Invalid target status\n");
+			dev_info(&spi->dev, "SPI Probe: Invalid target status\n");
 			return -1;
 		}
 

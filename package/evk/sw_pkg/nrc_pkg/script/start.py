@@ -15,7 +15,7 @@ model             = 7394      # 7292/7393/7394
 fw_download       = 1         # 0(FW Download off) or 1(FW Download on)
 fw_name           = 'uni_s1g.bin'
 ##################################################################################
-# DEBUG Conf.
+# DEdmesgBUG Conf.
 # NRC Driver log
 driver_debug      = 0         # NRC Driver debug option : 0(off) or 1(on)
 dbg_flow_control  = 0         # Print TRX slot and credit status in real-time
@@ -30,7 +30,7 @@ hostapd_debug     = 0         # Hostapd debug option    : 0(off) or 1(on)
 spi_clock    = 20000000       # SPI Master Clock Frequency
 spi_bus_num  = 1              # SPI Master Bus Number
 spi_cs_num   = 0              # SPI Master Chipselect Number
-spi_gpio_irq = 141              # NRC-CSPI EIRQ GPIO Number
+spi_gpio_irq = 72             # NRC-CSPI EIRQ GPIO Number
                               # BBB is 60 recommanded.
 spi_polling_interval = 0      # NRC-CSPI Polling Interval (msec)
 
