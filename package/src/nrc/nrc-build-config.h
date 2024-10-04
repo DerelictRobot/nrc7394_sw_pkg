@@ -22,7 +22,7 @@
 #define NRC_SW_ID       1
 
 #define NRC_BUILD_USE_HWSCAN
-#define ENABLE_HW_RESET
+//#define ENABLE_HW_RESET
 /* #define CONFIG_NRC_HIF_PRINT_BEACON */
 /* #define CONFIG_NRC_HIF_PRINT_RX_AUTH */
 /* #define CONFIG_NRC_HIF_PRINT_RX_DATA */
