@@ -37,12 +37,12 @@
 #include "nrc-bd.h"
 #endif /* defined(CONFIG_SUPPORT_BD) */
 
-char *fw_name;
+char *fw_name = "nrc7394_cspi.bin";
 module_param(fw_name, charp, 0444);
 MODULE_PARM_DESC(fw_name, "Firmware file name");
 
 #if defined(CONFIG_SUPPORT_BD)
-char *bd_name ="bd.dat";
+char *bd_name ="nrc7394_bd.dat";
 module_param(bd_name, charp, 0600);
 MODULE_PARM_DESC(bd_name, "Board Data file name");
 #endif /* defined(CONFIG_SUPPORT_BD) */

@@ -2371,15 +2371,16 @@ int nrc_cspi_gpio_alloc(struct spi_device *spi)
 // 		gpio_direction_input(spi_gpio_irq);
 // 	}		
 // #else
-
+	dev_err(&spi->dev, "Start IRQ assignment\n");
 	if (spi->irq >= 0) 
 	{
 		int gpio_irq;
 		if (of_property_read_u32(spi->dev.of_node, "interrupts", &gpio_irq)) {
 			dev_err(&spi->dev, "[Error] Failed to get interrupts info from dts\n");
-			goto err_free_all;
+			// goto err_free_all;
 		} else {
 			gpio_direction_input(gpio_irq);
+			dev_err(&spi->dev, "Start IRQ assignment\n");
 		}	
 	}
 // #endif
