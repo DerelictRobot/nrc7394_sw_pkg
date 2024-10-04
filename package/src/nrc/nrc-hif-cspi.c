@@ -2372,21 +2372,20 @@ int nrc_cspi_gpio_alloc(struct spi_device *spi)
 // 	}		
 // #else
 	dev_err(&spi->dev, "Start IRQ assignment\n");
-/* Get the IRQ GPIO (you can skip this if you're directly using interrupts property) */
-	irq_num = of_irq_get(spi->dev.of_node, 0);  // Get IRQ from the "interrupts" property
-	if (irq_num < 0) {
-	    dev_err(&spi->dev, "[Error] Failed to get IRQ from device tree\n");
-	    return irq_num;
-	}
 
-	/* Optionally, request the IRQ with devm_request_irq() */
-	ret = devm_request_irq(&spi->dev, irq_num, your_irq_handler, IRQF_TRIGGER_HIGH, "your_device_irq", your_dev_data);
-	if (ret) {
-	    dev_err(&spi->dev, "[Error] Failed to request IRQ\n");
-	    return ret;
-	}
+	if (spi->irq >= 0) 
+	{
+	    int irq_num;
+	    
+	    /* Directly retrieve the IRQ number from the "interrupts" property */
+	    irq_num = of_irq_get(spi->dev.of_node, 0);  // Get the first interrupt
+	    if (irq_num < 0) {
+	        dev_err(&spi->dev, "[Error] Failed to get IRQ from device tree\n");
+	        return irq_num;
+	    }
 
-dev_info(&spi->dev, "GPIO and IRQ assignment successful\n");
+	    dev_info(&spi->dev, "IRQ assignment successful\n");
+	}
 // #endif
 
 	return 0;
