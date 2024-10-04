@@ -29,7 +29,7 @@
 #else
 #include <linux/kthread.h>
 #endif
-
+#include <linux/of_irq.h>
 #include "nrc-init.h"
 #include "nrc-fw.h"
 #include "nrc-hif.h"
