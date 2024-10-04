@@ -39,7 +39,9 @@ ccflags-y += \
 endif
 
 #ccflags-y += -Wall -Werror -g
-ccflags-y += -Wall -Werror
+#ccflags-y += -Wall -Werror
+ccflags-y += -Wall
+
 
 all: modules
 
