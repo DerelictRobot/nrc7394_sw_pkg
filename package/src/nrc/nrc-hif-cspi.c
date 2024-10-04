@@ -2361,25 +2361,28 @@ int nrc_cspi_gpio_alloc(struct spi_device *spi)
 		gpio_direction_output(power_save_gpio[0], 0);
 	}
 
-#ifndef CONFIG_SPI_USE_DT /* spi->irq is real irq number, not gpio number by setting in dts */
-	if (spi->irq >= 0) {
-		/* Claim gpio used for irq */
-		if (gpio_request(spi_gpio_irq, "nrc-spi-irq") < 0) {
-			dev_err(&spi->dev, "[Error] gpio_reqeust() is failed (%d)", spi->irq);
-			goto err_free_all;
-		}
-		gpio_direction_input(spi_gpio_irq);
-	}		
-#else
-	if (spi->irq >= 0) {
+// #ifndef CONFIG_SPI_USE_DT /* spi->irq is real irq number, not gpio number by setting in dts */
+// 	if (spi->irq >= 0) {
+// 		/* Claim gpio used for irq */
+// 		if (gpio_request(spi_gpio_irq, "nrc-spi-irq") < 0) {
+// 			dev_err(&spi->dev, "[Error] gpio_reqeust() is failed (%d)", spi->irq);
+// 			goto err_free_all;
+// 		}
+// 		gpio_direction_input(spi_gpio_irq);
+// 	}		
+// #else
+
+	if (spi->irq >= 0) 
+	{
 		int gpio_irq;
 		if (of_property_read_u32(spi->dev.of_node, "interrupts", &gpio_irq)) {
 			dev_err(&spi->dev, "[Error] Failed to get interrupts info from dts\n");
 			goto err_free_all;
 		} else {
 			gpio_direction_input(gpio_irq);
-		}	}
-#endif
+		}	
+	}
+// #endif
 
 	return 0;
 
@@ -2420,11 +2423,11 @@ void nrc_cspi_gpio_free(struct spi_device *spi)
 		gpio_free(power_save_gpio[0]);
 	}
 
-#ifndef CONFIG_SPI_USE_DT /* spi->irq is real irq number, not gpio number by setting in dts */
-	if (spi->irq >= 0) {
-		gpio_free(spi_gpio_irq);
-	}
-#endif
+// #ifndef CONFIG_SPI_USE_DT /* spi->irq is real irq number, not gpio number by setting in dts */
+// 	if (spi->irq >= 0) {
+// 		gpio_free(spi_gpio_irq);
+// 	}
+// #endif
 }
 
 static struct nrc_spi_priv *nrc_cspi_alloc (struct spi_device *dev)
@@ -2594,13 +2597,13 @@ static struct spi_driver nrc_cspi_driver = {
 	},
 };
 
-#ifndef CONFIG_SPI_USE_DT
-static struct spi_board_info bi = {
-	.modalias = NRC_DRIVER_NAME,
-//	.chip_select = 0,
-	.mode = SPI_MODE_0,
-};
-#endif
+// #ifndef CONFIG_SPI_USE_DT
+// static struct spi_board_info bi = {
+// 	.modalias = NRC_DRIVER_NAME,
+// //	.chip_select = 0,
+// 	.mode = SPI_MODE_0,
+// };
+// #endif
 
 #ifndef CONFIG_SPI_USE_DT
 static struct spi_device *nrc_create_spi_device (void)
