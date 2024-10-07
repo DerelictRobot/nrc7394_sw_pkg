@@ -4,7 +4,7 @@ CHECKPATCH ?= $(KDIR)/scripts/checkpatch.pl
 
 include $(KDIR)/.config
 
-M_SRC = nrc
+M_SRC = nrc80211
 
 obj-m += $(M_SRC).o
 $(M_SRC)-objs = \
