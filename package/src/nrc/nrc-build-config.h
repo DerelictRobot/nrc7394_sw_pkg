@@ -211,7 +211,7 @@
 #define CONFIG_SPI_USE_DT
 #endif
 /* You can enable forcely in current version */
-#define CONFIG_SPI_USE_DT
+//#define CONFIG_SPI_USE_DT
 
 #if KERNEL_VERSION(5, 4, 0) <= NRC_TARGET_KERNEL_VERSION
 #define CONFIG_USE_MAX_MTU
