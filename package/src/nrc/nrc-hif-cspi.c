@@ -2383,12 +2383,10 @@ int nrc_cspi_gpio_alloc(struct spi_device *spi)
 
 	return 0;
 
-#ifndef CONFIG_SPI_USE_DT
 err_free_all:
 	if (power_save >= NRC_PS_DEEPSLEEP_TIM) {
 			gpio_free(power_save_gpio[0]);
 	}
-#endif
 
 err_rst_free:
 #if defined(ENABLE_HW_RESET)
