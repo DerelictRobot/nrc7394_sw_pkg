@@ -2615,7 +2615,7 @@ static int __spi_controller_match(struct device *dev, const void *data)
 	
 	return ctlr->bus_num == *bus_num;
 }
-static struct spi_controller *spi_busnum_to_master(u16 bus_num)
+struct spi_controller *spi_busnum_to_master(u16 bus_num)
 {
 	struct platform_device *pdev = NULL;
 	struct spi_master *master = NULL;
