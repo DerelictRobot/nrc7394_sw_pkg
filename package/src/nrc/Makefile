@@ -28,7 +28,6 @@ ccflags-y := \
 	-DDEBUG \
 	-DCONFIG_NRC_HIF_CSPI \
 	-DENABLE_DYNAMIC_PS \
-	-DCONFIG_MAC80211_MESH
 
 ldflags-y += -T$(M)/nrc.lds
 
