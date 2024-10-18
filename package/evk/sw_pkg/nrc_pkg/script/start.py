@@ -3,7 +3,7 @@
 import sys, os, time, subprocess, re
 import threading
 from mesh import *
-script_path = "/home/pi/nrc_pkg/script/"
+script_path = "/home/rpe/nrc_script/"
 
 # Default Configuration (you can change value you want here)
 ##################################################################################
@@ -13,7 +13,7 @@ max_cpuclock      = 1         # Set Max CPU Clock : 0(off) or 1(on)
 # Firmware Conf.
 model             = 7394      # 7292/7393/7394
 fw_download       = 1         # 0(FW Download off) or 1(FW Download on)
-fw_name           = 'uni_s1g.bin'
+fw_name           = 'nrc7394_cspi.bin'
 ##################################################################################
 # DEBUG Conf.
 # NRC Driver log
@@ -30,7 +30,7 @@ hostapd_debug     = 0         # Hostapd debug option    : 0(off) or 1(on)
 spi_clock    = 20000000       # SPI Master Clock Frequency
 spi_bus_num  = 1              # SPI Master Bus Number
 spi_cs_num   = 0              # SPI Master Chipselect Number
-spi_gpio_irq = 141              # NRC-CSPI EIRQ GPIO Number
+spi_gpio_irq = 72              # NRC-CSPI EIRQ GPIO Number
                               # BBB is 60 recommanded.
 spi_polling_interval = 0      # NRC-CSPI Polling Interval (msec)
 
@@ -405,8 +405,8 @@ def argv_print():
     print("------------------------------")
 
 def copyConf():
-    os.system("sudo /home/pi/nrc_pkg/sw/firmware/copy " + str(model) + " " + strBDName())
-    os.system("/home/pi/nrc_pkg/script/conf/etc/ip_config.sh " + strSTA() + " " +  str(relay_type) + " " + str(static_ip) + " " + str(batman))
+    os.system("sudo /home/rpe/nrc_script/copy " + str(model) + " " + strBDName())
+    os.system("/home/rpe/nrc_script/conf/etc/ip_config.sh " + strSTA() + " " +  str(relay_type) + " " + str(static_ip) + " " + str(batman))
 
 def startNAT():
     os.system('sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"')
@@ -470,7 +470,7 @@ def self_config_check():
 
     print("country: " + country +", prefer_bw: " + str(prefer_bw)+ ", dwell_time: "+ str(dwell_time))
 
-    self_conf_cmd = script_path+'cli_app show self_config ' + country +' '+str(prefer_bw) +' ' + str(dwell_time) + ' '
+    self_conf_cmd = '/usr/bin/nrc-cli show self_config ' + country +' '+str(prefer_bw) +' ' + str(dwell_time) + ' '
     if int(dwell_time) > 1000:
         dwell_time = 1000
     elif int(dwell_time) < 10:
@@ -710,9 +710,6 @@ def setModuleParam():
     return module_param
 
 def run_common():
-    if int(max_cpuclock) == 1:
-        print("[*] Set Max CPU Clock on RPi")
-        os.system("sudo /home/pi/nrc_pkg/script/conf/etc/clock_config.sh")
 
     print("[0] Clear")
     os.system("sudo hostapd_cli disable 2>/dev/null")
@@ -729,6 +726,11 @@ def run_common():
     stopDHCPCD()
     stopDNSMASQ()
     time.sleep(1)
+    os.system("sudo rpe-rw-remount")
+    time.sleep(1)
+    os.system("sudo echo 70 > /sys/class/gpio/export")
+    os.system("sudo echo 0 > /sys/class/gpio/gpio70/value")
+    os.system("sudo echo 1 > /sys/class/gpio/gpio70/value")
 
     print("[1] Copy and Set Module Parameters")
     copyConf()
@@ -738,8 +740,8 @@ def run_common():
     os.system("sudo iw reg set " + strOriCountry())
 
     print("[3] Loading module")
-    print("sudo insmod /home/pi/nrc_pkg/sw/driver/nrc.ko " + insmod_arg)
-    os.system("sudo insmod /home/pi/nrc_pkg/sw/driver/nrc.ko " + insmod_arg + "")
+    print("sudo modprobe -v nrc " + insmod_arg)
+    os.system("sudo modprobe -v nrc " + insmod_arg + "")
 
     if int(spi_polling_interval) <= 0:
         time.sleep(5)
@@ -753,17 +755,17 @@ def run_common():
 
     ret = subprocess.call(["sudo", "ifconfig", "wlan0", "up"])
     if ret == 255:
-        os.system('sudo rmmod nrc.ko')
+        os.system('sudo modprobe -r nrc')
         sys.exit()
 
     print("[4] Set Maximum TX Power")
-    os.system('/home/pi/nrc_pkg/script/cli_app set txpwr limit ' + str(max_txpwr))
+    os.system('/usr/bin/nrc-cli set txpwr limit ' + str(max_txpwr))
     if strSTA() != 'SNIFFER':
         print("[*] Transmission Power Control(TPC) is activated")
         os.system('sudo iw phy nrc80211 set txpower limit ' + str(int(max_txpwr) * 100))
 
     print("[5] Set guard interval: " + guard_int)
-    os.system('/home/pi/nrc_pkg/script/cli_app set gi ' + guard_int)
+    os.system('/usr/bin/nrc-cli set gi ' + guard_int)
 
     print("[*] Start DHCPCD and DNSMASQ")
     startDHCPCD()
@@ -780,9 +782,9 @@ def run_ibss(interface):
 
     print("[6] Start wpa_supplicant on " + interface)
     if strSecurity() == 'OPEN':
-        os.system("sudo wpa_supplicant -i" + interface + " -c /home/pi/nrc_pkg/script/conf/" + country + "/ibss_halow_open.conf " + debug + " &")
+        os.system("sudo wpa_supplicant -i" + interface + " -c /home/rpe/nrc_script/conf/" + country + "/ibss_halow_open.conf " + debug + " &")
     elif strSecurity() == 'WPA2-PSK':
-        os.system("sudo wpa_supplicant -i" + interface + " -c /home/pi/nrc_pkg/script/conf/" + country + "/ibss_halow_wpa2.conf " + debug + " &")
+        os.system("sudo wpa_supplicant -i" + interface + " -c /home/rpe/nrc_script/conf/" + country + "/ibss_halow_wpa2.conf " + debug + " &")
 
 def run_sta(interface):
     country = str(sys.argv[3])
@@ -811,15 +813,15 @@ def run_sta(interface):
 
     print("[6] Start wpa_supplicant on " + interface)
     if strSecurity() == 'OPEN':
-        os.system("sudo wpa_supplicant -i" + interface + " -c /home/pi/nrc_pkg/script/conf/" + country + "/sta_halow_open.conf " + bridge + debug + " &")
+        os.system("sudo wpa_supplicant -i" + interface + " -c /home/rpe/nrc_script/conf/" + country + "/sta_halow_open.conf " + bridge + debug + " &")
     elif strSecurity() == 'WPA2-PSK':
-        os.system("sudo wpa_supplicant -i" + interface + " -c /home/pi/nrc_pkg/script/conf/" + country + "/sta_halow_wpa2.conf " + bridge + debug + " &")
+        os.system("sudo wpa_supplicant -i" + interface + " -c /home/rpe/nrc_script/conf/" + country + "/sta_halow_wpa2.conf " + bridge + debug + " &")
     elif strSecurity() == 'WPA3-OWE':
-        os.system("sudo wpa_supplicant -i" + interface + " -c /home/pi/nrc_pkg/script/conf/" + country + "/sta_halow_owe.conf " + bridge + debug + " &")
+        os.system("sudo wpa_supplicant -i" + interface + " -c /home/rpe/nrc_script/conf/" + country + "/sta_halow_owe.conf " + bridge + debug + " &")
     elif strSecurity() == 'WPA3-SAE':
-        os.system("sudo wpa_supplicant -i" + interface + " -c /home/pi/nrc_pkg/script/conf/" + country + "/sta_halow_sae.conf " + bridge + debug + " &")
+        os.system("sudo wpa_supplicant -i" + interface + " -c /home/rpe/nrc_script/conf/" + country + "/sta_halow_sae.conf " + bridge + debug + " &")
     elif strSecurity() == 'WPA-PBC':
-        os.system("sudo wpa_supplicant -i" + interface + " -c /home/pi/nrc_pkg/script/conf/" + country + "/sta_halow_pbc.conf " + bridge + debug + " &")
+        os.system("sudo wpa_supplicant -i" + interface + " -c /home/rpe/nrc_script/conf/" + country + "/sta_halow_pbc.conf " + bridge + debug + " &")
         time.sleep(1)
         os.system("sudo wpa_cli wps_pbc")
     time.sleep(3)
@@ -907,7 +909,7 @@ def run_ap(interface):
             time.sleep(1)
             os.system("sudo hostapd_cli wps_pbc")
     else:
-        launch_hostapd( interface, '/home/pi/nrc_pkg/script/conf/' + country + conf_file, country, debug, channel )
+        launch_hostapd( interface, '/home/rpe/nrc_script/conf/' + country + conf_file, country, debug, channel )
         if strSecurity() == 'WPA-PBC':            
             time.sleep(1)
             os.system("sudo hostapd_cli wps_pbc")
