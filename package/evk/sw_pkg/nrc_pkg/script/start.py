@@ -405,7 +405,8 @@ def argv_print():
     print("------------------------------")
 
 def copyConf():
-    os.system("sudo /home/rpe/nrc_script/copy " + str(model) + " " + strBDName())
+    print("------------------------------")
+    # os.system("sudo /home/rpe/nrc_script/copy " + str(model) + " " + strBDName())
     os.system("/home/rpe/nrc_script/conf/etc/ip_config.sh " + strSTA() + " " +  str(relay_type) + " " + str(static_ip) + " " + str(batman))
 
 def startNAT():
@@ -740,8 +741,8 @@ def run_common():
     os.system("sudo iw reg set " + strOriCountry())
 
     print("[3] Loading module")
-    print("sudo modprobe -v nrc " + insmod_arg)
-    os.system("sudo modprobe -v nrc " + insmod_arg + "")
+    print("sudo modprobe -v nrc ")
+    os.system("sudo modprobe -v nrc ")
 
     if int(spi_polling_interval) <= 0:
         time.sleep(5)

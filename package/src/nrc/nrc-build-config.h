@@ -21,6 +21,8 @@
 
 #define NRC_SW_ID       1
 
+#define ENABLE_HW_RESET
+
 #define NRC_BUILD_USE_HWSCAN
 /* #define CONFIG_NRC_HIF_PRINT_BEACON */
 /* #define CONFIG_NRC_HIF_PRINT_RX_AUTH */
