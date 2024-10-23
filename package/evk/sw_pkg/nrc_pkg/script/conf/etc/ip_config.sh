@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #This script is for setting IP and DHCP
-source /home/pi/nrc_pkg/script/conf/etc/CONFIG_IP
+source /home/rpe/nrc_script/conf/etc/CONFIG_IP
 
 if [ $# -eq 0 ]; then
 	echo "Usage: ./ip_config.sh [STA|AP|RELAY|SNIFFER|MESH|IBSS|IBSS_DHCPS] [relay_type] [static_ip] [batman]"

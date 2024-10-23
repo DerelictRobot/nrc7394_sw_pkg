@@ -47,7 +47,7 @@ HALOW_MESH_DHCPS_CONFIG=192.168.200.0,192.168.200.255,255.255.255.0,infinite
 
 # Local Confguration files for DHCPCD and DNSMASQ
 # Those files are copied into /etc/dhcpcd.conf and /etc/dnsmaq.conf
-DHCPCD_CONF_FILE=/home/pi/nrc_pkg/etc/dhcpcd/dhcpcd.conf
-DNSMASQ_CONF_FILE=/home/pi/nrc_pkg/etc/dnsmasq/dnsmasq.conf
+DHCPCD_CONF_FILE=/home/rpe/nrc_script/etc/dhcpcd/dhcpcd.conf
+DNSMASQ_CONF_FILE=/home/rpe/nrc_script/etc/dnsmasq/dnsmasq.conf
 ##############################################################################################
 
